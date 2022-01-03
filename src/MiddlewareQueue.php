@@ -48,6 +48,7 @@ class MiddlewareQueue implements Countable, Iterator
     /**
      * Get the Middleware at the current index.
      * @return Middleware The Middleware at the current index.
+     * @throws OutOfBoundsException if the index is out of bounds.
      */
     public function current(): Middleware
     {
