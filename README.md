@@ -128,6 +128,8 @@ $response = $middleware->process($request, $handler);
 
 This method will return a [*ClientResponse*](https://github.com/elusivecodes/fyreserver).
 
+The implemented method should call the `handle` method of the *RequestHandler* to handle the next middleware in the queue.
+
 
 ## Request Handlers
 
