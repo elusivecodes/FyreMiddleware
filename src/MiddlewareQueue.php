@@ -5,7 +5,8 @@ namespace Fyre\Middleware;
 
 use
     Countable,
-    Iterator;
+    Iterator,
+    OutOfBoundsException;
 
 use function
     array_key_exists,
@@ -51,7 +52,7 @@ class MiddlewareQueue implements Countable, Iterator
     public function current(): Middleware
     {
         if (!$this->valid()) {
-            // exception
+            throw new OutOfBoundsException('Invalid middleware at index: '.$this->index);
         }
 
         return $this->queue[$this->index];
