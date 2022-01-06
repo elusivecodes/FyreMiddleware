@@ -29,7 +29,7 @@ class MiddlewareQueue implements Countable, Iterator
      * @param Middleware $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function add(Middleware $middleware): self
+    public function add(Middleware $middleware): static
     {
         $this->queue[] = $middleware;
 
@@ -65,7 +65,7 @@ class MiddlewareQueue implements Countable, Iterator
      * @param Middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function insertAt(int $index, Middleware $middleware): self
+    public function insertAt(int $index, Middleware $middleware): static
     {
         array_splice($this->queue, $index, 0, [$middleware]);
 
@@ -94,7 +94,7 @@ class MiddlewareQueue implements Countable, Iterator
      * @param Middleware $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function prepend(Middleware $middleware): self
+    public function prepend(Middleware $middleware): static
     {
         array_unshift($this->queue, $middleware);
 
