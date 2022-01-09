@@ -16,7 +16,7 @@ final class MiddlewareQueueTest extends TestCase
 
     public function testCount()
     {
-        $this->assertEquals(
+        $this->assertSame(
             2,
             $this->queue->count()
         );
@@ -39,7 +39,7 @@ final class MiddlewareQueueTest extends TestCase
         $this->queue->insertAt(1, $middleware);
         $this->queue->next();
 
-        $this->assertEquals(
+        $this->assertSame(
             $middleware,
             $this->queue->current()
         );
@@ -51,7 +51,7 @@ final class MiddlewareQueueTest extends TestCase
 
         $this->queue->prepend($middleware);
 
-        $this->assertEquals(
+        $this->assertSame(
             $middleware,
             $this->queue->current()
         );

@@ -31,13 +31,11 @@ final class RequestHandlerTest extends TestCase
             $handler->handle($request)
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $middleware1->loaded()
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $middleware2->loaded()
         );
     }
