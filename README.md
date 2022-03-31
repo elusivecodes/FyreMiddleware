@@ -119,14 +119,14 @@ Custom middleware can be created by extending `\Fyre\Middleware\Middleware`, ens
 
 **Process**
 
-- `$request` is a [*ServerRequest*](https://github.com/elusivecodes/fyreserver).
+- `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 - `$handler` is a *RequestHandler*.
 
 ```php
 $response = $middleware->process($request, $handler);
 ```
 
-This method will return a [*ClientResponse*](https://github.com/elusivecodes/fyreserver).
+This method will return a [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).
 
 The implemented method should call the `handle` method of the *RequestHandler* to handle the next middleware in the queue.
 
@@ -143,10 +143,10 @@ $handler = new RequestHandler($queue);
 
 Handle the next middleware in the queue.
 
-- `$request` is a [*ServerRequest*](https://github.com/elusivecodes/fyreserver).
+- `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 
 ```php
 $response = $handler->handler($request);
 ```
 
-This method will return a [*ClientResponse*](https://github.com/elusivecodes/fyreserver).
+This method will return a [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).
