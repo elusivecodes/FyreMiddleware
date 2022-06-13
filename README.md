@@ -37,7 +37,7 @@ $queue = new MiddlewareQueue();
 
 Add [*Middleware*](#middleware).
 
-- `$middleware` is a *[*Middleware*](#middleware).
+- `$middleware` is a [*Middleware*](#middleware).
 
 ```php
 $queue->add($middleware);
@@ -45,7 +45,7 @@ $queue->add($middleware);
 
 **Count**
 
-Get the *[*Middleware*](#middleware) count.
+Get the [*Middleware*](#middleware) count.
 
 ```php
 $count = $queue->count();
@@ -53,7 +53,7 @@ $count = $queue->count();
 
 **Current**
 
-Get the *[*Middleware*](#middleware) at the current index.
+Get the [*Middleware*](#middleware) at the current index.
 
 ```php
 $middleware = $queue->current();
