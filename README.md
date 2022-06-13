@@ -35,9 +35,9 @@ $queue = new MiddlewareQueue();
 
 **Add**
 
-Add *Middleware*.
+Add [*Middleware*](#middleware).
 
-- `$middleware` is a *Middleware*.
+- `$middleware` is a *[*Middleware*](#middleware).
 
 ```php
 $queue->add($middleware);
@@ -45,7 +45,7 @@ $queue->add($middleware);
 
 **Count**
 
-Get the *Middleware* count.
+Get the *[*Middleware*](#middleware) count.
 
 ```php
 $count = $queue->count();
@@ -53,7 +53,7 @@ $count = $queue->count();
 
 **Current**
 
-Get the *Middleware* at the current index.
+Get the *[*Middleware*](#middleware) at the current index.
 
 ```php
 $middleware = $queue->current();
@@ -61,10 +61,10 @@ $middleware = $queue->current();
 
 **Insert At**
 
-Insert *Middleware* at a specified index.
+Insert [*Middleware*](#middleware) at a specified index.
 
 - `$index` is a number representing the index.
-- `$middleware` is a *Middleware*.
+- `$middleware` is a [*Middleware*](#middleware).
 
 ```php
 $queue->insertAt($index, $middleware);
@@ -88,9 +88,9 @@ $queue->next();
 
 **Prepend**
 
-Prepend *Middleware*.
+Prepend [*Middleware*](#middleware).
 
-- `$middleware` is a *Middleware*.
+- `$middleware` is a [*Middleware*](#middleware).
 
 ```php
 $queue->prepend($middleware);
@@ -120,7 +120,7 @@ Custom middleware can be created by extending `\Fyre\Middleware\Middleware`, ens
 **Process**
 
 - `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
-- `$handler` is a *RequestHandler*.
+- `$handler` is a [*RequestHandler*](#request-handlers).
 
 ```php
 $response = $middleware->process($request, $handler);
@@ -128,12 +128,12 @@ $response = $middleware->process($request, $handler);
 
 This method will return a [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).
 
-The implemented method should call the `handle` method of the *RequestHandler* to handle the next middleware in the queue.
+The implemented method should call the `handle` method of the [*RequestHandler*](#request-handlers) to handle the next middleware in the queue.
 
 
 ## Request Handlers
 
-- `$queue` is a *MiddlewareQueue*.
+- `$queue` is a [*MiddlewareQueue*](#middleware-queues).
 
 ```php
 $handler = new RequestHandler($queue);
