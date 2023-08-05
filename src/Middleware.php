@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Fyre\Middleware;
 
-use
-    Fyre\Server\ClientResponse,
-    Fyre\Server\ServerRequest;
+use Fyre\Server\ClientResponse;
+use Fyre\Server\ServerRequest;
 
 /**
  * Middleware

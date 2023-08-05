@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Fyre\Middleware;
 
-use
-    Fyre\Server\ClientResponse,
-    Fyre\Server\ServerRequest;
+use Fyre\Server\ClientResponse;
+use Fyre\Server\ServerRequest;
 
 /**
  * RequestHandler
@@ -32,7 +31,7 @@ class RequestHandler
     public function handle(ServerRequest $request): ClientResponse
     {
         if (!$this->queue->valid()) {
-            return new ClientResponse;
+            return new ClientResponse();
         }
 
         $middleware = $this->queue->current();

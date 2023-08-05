@@ -1,6 +1,6 @@
 # FyreMiddleware
 
-**FyreMiddleware** is a free, middleware library for *PHP*.
+**FyreMiddleware** is a free, open-source middleware library for *PHP*.
 
 
 ## Table Of Contents

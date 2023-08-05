@@ -3,16 +3,14 @@ declare(strict_types=1);
 
 namespace Fyre\Middleware;
 
-use
-    Countable,
-    Iterator,
-    OutOfBoundsException;
+use Countable;
+use Iterator;
+use OutOfBoundsException;
 
-use function
-    array_key_exists,
-    array_splice,
-    array_unshift,
-    count;
+use function array_key_exists;
+use function array_splice;
+use function array_unshift;
+use function count;
 
 /**
  * MiddlewareQueue

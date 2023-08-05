@@ -3,18 +3,17 @@ declare(strict_types=1);
 
 namespace Tests\Mock;
 
-use
-    Fyre\Middleware\Middleware,
-    Fyre\Middleware\RequestHandler,
-    Fyre\Server\ClientResponse,
-    Fyre\Server\ServerRequest;
+use Fyre\Middleware\Middleware;
+use Fyre\Middleware\RequestHandler;
+use Fyre\Server\ClientResponse;
+use Fyre\Server\ServerRequest;
 
 class MockMiddleware extends Middleware
 {
 
     protected bool $loaded = false;
 
-    public function loaded(): bool
+    public function isLoaded(): bool
     {
         return $this->loaded;
     }

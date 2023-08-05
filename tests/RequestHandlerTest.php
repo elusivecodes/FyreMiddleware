@@ -3,28 +3,27 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use
-    Fyre\Middleware\MiddlewareQueue,
-    Fyre\Middleware\RequestHandler,
-    Fyre\Server\ClientResponse,
-    Fyre\Server\ServerRequest,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\MockMiddleware;
+use Fyre\Middleware\MiddlewareQueue;
+use Fyre\Middleware\RequestHandler;
+use Fyre\Server\ClientResponse;
+use Fyre\Server\ServerRequest;
+use PHPUnit\Framework\TestCase;
+use Tests\Mock\MockMiddleware;
 
 final class RequestHandlerTest extends TestCase
 {
 
     public function testRun()
     {
-        $middleware1 = new MockMiddleware;
-        $middleware2 = new MockMiddleware;
+        $middleware1 = new MockMiddleware();
+        $middleware2 = new MockMiddleware();
 
-        $queue = new MiddlewareQueue;
+        $queue = new MiddlewareQueue();
         $queue->add($middleware1);
         $queue->add($middleware2);
 
         $handler = new RequestHandler($queue);
-        $request = new ServerRequest;
+        $request = new ServerRequest();
 
         $this->assertInstanceOf(
             ClientResponse::class,
@@ -32,11 +31,11 @@ final class RequestHandlerTest extends TestCase
         );
 
         $this->assertTrue(
-            $middleware1->loaded()
+            $middleware1->isLoaded()
         );
 
         $this->assertTrue(
-            $middleware2->loaded()
+            $middleware2->isLoaded()
         );
     }
 

@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use
-    Fyre\Middleware\Middleware,
-    Fyre\Middleware\MiddlewareQueue,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\MockMiddleware;
+use Fyre\Middleware\Middleware;
+use Fyre\Middleware\MiddlewareQueue;
+use PHPUnit\Framework\TestCase;
+use Tests\Mock\MockMiddleware;
 
 final class MiddlewareQueueTest extends TestCase
 {
@@ -34,7 +33,7 @@ final class MiddlewareQueueTest extends TestCase
 
     public function testInsertAt()
     {
-        $middleware = new MockMiddleware;
+        $middleware = new MockMiddleware();
 
         $this->queue->insertAt(1, $middleware);
         $this->queue->next();
@@ -47,7 +46,7 @@ final class MiddlewareQueueTest extends TestCase
 
     public function testPrepend()
     {
-        $middleware = new MockMiddleware;
+        $middleware = new MockMiddleware();
 
         $this->queue->prepend($middleware);
 
@@ -61,8 +60,8 @@ final class MiddlewareQueueTest extends TestCase
     {
         $this->queue = new MiddlewareQueue();
 
-        $this->queue->add(new MockMiddleware);
-        $this->queue->add(new MockMiddleware);
+        $this->queue->add(new MockMiddleware());
+        $this->queue->add(new MockMiddleware());
     }
 
 }
