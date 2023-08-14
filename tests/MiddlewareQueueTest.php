@@ -13,7 +13,7 @@ final class MiddlewareQueueTest extends TestCase
 
     protected MiddlewareQueue $queue;
 
-    public function testCount()
+    public function testCount(): void
     {
         $this->assertSame(
             2,
@@ -21,7 +21,7 @@ final class MiddlewareQueueTest extends TestCase
         );
     }
 
-    public function testIteration()
+    public function testIteration(): void
     {
         foreach ($this->queue AS $middleware) {
             $this->assertInstanceOf(
@@ -31,7 +31,7 @@ final class MiddlewareQueueTest extends TestCase
         }
     }
 
-    public function testInsertAt()
+    public function testInsertAt(): void
     {
         $middleware = new MockMiddleware();
 
@@ -44,7 +44,7 @@ final class MiddlewareQueueTest extends TestCase
         );
     }
 
-    public function testPrepend()
+    public function testPrepend(): void
     {
         $middleware = new MockMiddleware();
 

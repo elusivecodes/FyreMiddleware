@@ -13,7 +13,7 @@ use Tests\Mock\MockMiddleware;
 final class RequestHandlerTest extends TestCase
 {
 
-    public function testRun()
+    public function testRun(): void
     {
         $middleware1 = new MockMiddleware();
         $middleware2 = new MockMiddleware();
