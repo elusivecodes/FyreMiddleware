@@ -23,6 +23,6 @@
         "phpunit/phpunit": "^10"
     },
     "require": {
-        "fyre/server": "^2.0"
+        "fyre/server": "^3.0"
     }
 }

@@ -37,7 +37,7 @@ $queue = new MiddlewareQueue();
 
 Add [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware).
+- `$middleware` is a [*Middleware*](#middleware) or a *Closure*.
 
 ```php
 $queue->add($middleware);
@@ -64,7 +64,7 @@ $middleware = $queue->current();
 Insert [*Middleware*](#middleware) at a specified index.
 
 - `$index` is a number representing the index.
-- `$middleware` is a [*Middleware*](#middleware).
+- `$middleware` is a [*Middleware*](#middleware) or a *Closure*.
 
 ```php
 $queue->insertAt($index, $middleware);
@@ -90,7 +90,7 @@ $queue->next();
 
 Prepend [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware).
+- `$middleware` is a [*Middleware*](#middleware) or a *Closure*.
 
 ```php
 $queue->prepend($middleware);

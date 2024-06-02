@@ -13,6 +13,17 @@ abstract class Middleware
 {
 
     /**
+     * Invoke the middleware.
+     * @param ServerRequest $request The ServerRequest.
+     * @param RequestHandler $handler The RequestHandler.
+     * @return ClientResponse The ClientResponse.
+     */
+    public function __invoke(ServerRequest $request, RequestHandler $handler): ClientResponse
+    {
+        return $this->process($request, $handler);
+    }
+
+    /**
      * Process a ServerRequest.
      * @param ServerRequest $request The ServerRequest.
      * @param RequestHandler $handler The RequestHandler.

@@ -22,6 +22,13 @@ final class RequestHandlerTest extends TestCase
         $queue->add($middleware1);
         $queue->add($middleware2);
 
+        $closureLoaded = false;
+        $queue->add(function(ServerRequest $request, RequestHandler $handler) use (&$closureLoaded) {
+            $closureLoaded = true;
+
+            return $handler->handle($request);
+        });
+
         $handler = new RequestHandler($queue);
         $request = new ServerRequest();
 
@@ -37,6 +44,8 @@ final class RequestHandlerTest extends TestCase
         $this->assertTrue(
             $middleware2->isLoaded()
         );
+
+        $this->assertTrue($closureLoaded);
     }
 
 }
