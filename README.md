@@ -7,6 +7,7 @@
 - [Installation](#installation)
 - [Middleware Queues](#middleware-queues)
     - [Middleware](#middleware)
+- [Middleware Registry](#middleware-registry)
 - [Request Handlers](#request-handlers)
 
 
@@ -37,7 +38,7 @@ $queue = new MiddlewareQueue();
 
 Add [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware) or a *Closure*.
+- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*Middleware Registry*](#middleware-registry) alias.
 
 ```php
 $queue->add($middleware);
@@ -64,7 +65,7 @@ $middleware = $queue->current();
 Insert [*Middleware*](#middleware) at a specified index.
 
 - `$index` is a number representing the index.
-- `$middleware` is a [*Middleware*](#middleware) or a *Closure*.
+- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*Middleware Registry*](#middleware-registry) alias.
 
 ```php
 $queue->insertAt($index, $middleware);
@@ -90,7 +91,7 @@ $queue->next();
 
 Prepend [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware) or a *Closure*.
+- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*Middleware Registry*](#middleware-registry) alias.
 
 ```php
 $queue->prepend($middleware);
@@ -131,6 +132,42 @@ This method will return a [*ClientResponse*](https://github.com/elusivecodes/Fyr
 The implemented method should call the `handle` method of the [*RequestHandler*](#request-handlers) to handle the next middleware in the queue.
 
 
+## Middleware Registry
+
+```php
+use Fyre\Middleware\MiddlewareRegistry;
+```
+
+**Clear**
+
+Clear all aliases and middleware.
+
+```php
+MiddlewareRegistry::clear();
+```
+
+**Map**
+
+Map an alias to middleware.
+
+- `$alias` is a string representing the middleware alias.
+- `$middleware` is a string representing the [*Middleware*](#middleware) class name, or a closure that returns an instance of a [*Middleware*](middleware) class.
+
+```php
+MiddlewareRegistry::map($alias, $middleware);
+```
+
+**Use**
+
+Load a shared Middleware instance.
+
+- `$alias` is a string representing the middleware alias.
+
+```php
+$middleware = MiddlewareRegistry::use($alias);
+```
+
+
 ## Request Handlers
 
 - `$queue` is a [*MiddlewareQueue*](#middleware-queues).
@@ -146,7 +183,7 @@ Handle the next middleware in the queue.
 - `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 
 ```php
-$response = $handler->handler($request);
+$response = $handler->handle($request);
 ```
 
 This method will return a [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).

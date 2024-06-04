@@ -37,7 +37,7 @@ class RequestHandler
         $middleware = $this->queue->current();
         $this->queue->next();
 
-        return $middleware($request, $this);
+        return $middleware->process($request, $this);
     }
 
 }

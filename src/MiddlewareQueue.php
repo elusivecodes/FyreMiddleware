@@ -24,11 +24,20 @@ class MiddlewareQueue implements Countable, Iterator
     protected array $queue = [];
 
     /**
+     * New ClosureMiddleware constructor.
+     * @param array $middleware The middleware.
+     */
+    public function __construct(array $middleware = [])
+    {
+        $this->queue = $middleware;
+    }
+
+    /**
      * Add Middleware.
-     * @param Middleware|Closure $middleware The Middleware.
+     * @param Middleware|Closure|string $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function add(Middleware|Closure $middleware): static
+    public function add(Middleware|Closure|string $middleware): static
     {
         $this->queue[] = $middleware;
 
@@ -46,25 +55,35 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * Get the Middleware at the current index.
-     * @return Middleware|Closure The Middleware at the current index.
+     * @return Middleware The Middleware at the current index.
      * @throws OutOfBoundsException if the index is out of bounds.
      */
-    public function current(): Middleware|Closure
+    public function current(): Middleware
     {
         if (!$this->valid()) {
             throw new OutOfBoundsException('Invalid middleware at index: '.$this->index);
         }
 
-        return $this->queue[$this->index];
+        $middleware = $this->queue[$this->index];
+
+        if ($middleware instanceof Middleware) {
+            return $this->queue[$this->index];
+        }
+
+        if ($middleware instanceof Closure) {
+            return $this->queue[$this->index] = new ClosureMiddleware($middleware);
+        }
+
+        return $this->queue[$this->index] = MiddlewareRegistry::use($middleware);
     }
 
     /**
      * Insert Middleware at a specified index.
      * @param int $index The index.
-     * @param Middleware|Closure The Middleware.
+     * @param Middleware|Closure|string The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function insertAt(int $index, Middleware|Closure $middleware): static
+    public function insertAt(int $index, Middleware|Closure|string $middleware): static
     {
         array_splice($this->queue, $index, 0, [$middleware]);
 
@@ -90,10 +109,10 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * Prepend Middleware.
-     * @param Middleware|Closure $middleware The Middleware.
+     * @param Middleware|Closure|string $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function prepend(Middleware|Closure $middleware): static
+    public function prepend(Middleware|Closure|string $middleware): static
     {
         array_unshift($this->queue, $middleware);
 
