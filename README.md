@@ -20,15 +20,12 @@
 composer require fyre/middleware
 ```
 
-In PHP:
+
+## Middleware Queues
 
 ```php
 use Fyre\Middleware\MiddlewareQueue;
-use Fyre\Middleware\RequestHandler;
 ```
-
-
-## Middleware Queues
 
 ```php
 $queue = new MiddlewareQueue();
@@ -169,6 +166,10 @@ $middleware = MiddlewareRegistry::use($alias);
 
 
 ## Request Handlers
+
+```php
+use Fyre\Middleware\RequestHandler;
+```
 
 - `$queue` is a [*MiddlewareQueue*](#middleware-queues).
 
