@@ -39,6 +39,24 @@ abstract class MiddlewareRegistry
     }
 
     /**
+     * Resolve Middleware.
+     * @param Middleware|Closure|string $middleware The Middleware.
+     * @return Middleware The Middleware.
+     */
+    public static function resolve(Middleware|Closure|string $middleware): Middleware
+    {
+        if ($middleware instanceof Middleware) {
+            return $middleware;
+        }
+
+        if ($middleware instanceof Closure) {
+            return new ClosureMiddleware($middleware);
+        }
+
+        return static::use($middleware);
+    }
+
+    /**
      * Load a shared Middleware instance.
      * @param string $alias The middleware alias.
      * @return Middleware The Middleware.

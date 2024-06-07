@@ -14,13 +14,16 @@ class RequestHandler
 
     protected MiddlewareQueue $queue;
 
+    protected ClientResponse $initialResponse;
+
     /**
      * New RequestHandler constructor.
      * @param MiddlewareQueue $queue The MiddlewareQueue.
      */
-    public function __construct(MiddlewareQueue $queue)
+    public function __construct(MiddlewareQueue $queue, ClientResponse|null $initialResponse = null)
     {
         $this->queue = $queue;
+        $this->initialResponse = $initialResponse ?? new ClientResponse();
     }
 
     /**
@@ -31,7 +34,7 @@ class RequestHandler
     public function handle(ServerRequest $request): ClientResponse
     {
         if (!$this->queue->valid()) {
-            return new ClientResponse();
+            return $this->initialResponse;
         }
 
         $middleware = $this->queue->current();

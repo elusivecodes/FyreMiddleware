@@ -25,11 +25,13 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * New ClosureMiddleware constructor.
-     * @param array $middleware The middleware.
+     * @param array $middlewares The middleware.
      */
-    public function __construct(array $middleware = [])
+    public function __construct(array $middlewares = [])
     {
-        $this->queue = $middleware;
+        foreach ($middlewares AS $middleware) {
+            $this->add($middleware);
+        }
     }
 
     /**
@@ -39,7 +41,7 @@ class MiddlewareQueue implements Countable, Iterator
      */
     public function add(Middleware|Closure|string $middleware): static
     {
-        $this->queue[] = $middleware;
+        $this->queue[] = MiddlewareRegistry::resolve($middleware);
 
         return $this;
     }
@@ -64,17 +66,7 @@ class MiddlewareQueue implements Countable, Iterator
             throw new OutOfBoundsException('Invalid middleware at index: '.$this->index);
         }
 
-        $middleware = $this->queue[$this->index];
-
-        if ($middleware instanceof Middleware) {
-            return $this->queue[$this->index];
-        }
-
-        if ($middleware instanceof Closure) {
-            return $this->queue[$this->index] = new ClosureMiddleware($middleware);
-        }
-
-        return $this->queue[$this->index] = MiddlewareRegistry::use($middleware);
+        return $this->queue[$this->index];
     }
 
     /**
@@ -85,7 +77,7 @@ class MiddlewareQueue implements Countable, Iterator
      */
     public function insertAt(int $index, Middleware|Closure|string $middleware): static
     {
-        array_splice($this->queue, $index, 0, [$middleware]);
+        array_splice($this->queue, $index, 0, [MiddlewareRegistry::resolve($middleware)]);
 
         return $this;
     }
@@ -114,7 +106,7 @@ class MiddlewareQueue implements Countable, Iterator
      */
     public function prepend(Middleware|Closure|string $middleware): static
     {
-        array_unshift($this->queue, $middleware);
+        array_unshift($this->queue, MiddlewareRegistry::resolve($middleware));
 
         return $this;
     }

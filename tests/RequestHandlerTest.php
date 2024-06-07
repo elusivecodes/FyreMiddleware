@@ -18,16 +18,10 @@ final class RequestHandlerTest extends TestCase
         $middleware1 = new MockMiddleware();
         $middleware2 = new MockMiddleware();
 
-        $queue = new MiddlewareQueue();
-        $queue->add($middleware1);
-        $queue->add($middleware2);
-
-        $closureLoaded = false;
-        $queue->add(function(ServerRequest $request, RequestHandler $handler) use (&$closureLoaded) {
-            $closureLoaded = true;
-
-            return $handler->handle($request);
-        });
+        $queue = new MiddlewareQueue([
+            $middleware1,
+            $middleware2
+        ]);
 
         $handler = new RequestHandler($queue);
         $request = new ServerRequest();
@@ -44,8 +38,22 @@ final class RequestHandlerTest extends TestCase
         $this->assertTrue(
             $middleware2->isLoaded()
         );
-
-        $this->assertTrue($closureLoaded);
     }
+
+    public function testInitialResponse(): void
+    {
+        $queue = new MiddlewareQueue();
+
+        $response = new ClientResponse();
+        $handler = new RequestHandler($queue, $response);
+        $request = new ServerRequest();
+
+        $this->assertSame(
+            $response,
+            $handler->handle($request)
+        );
+    }
+
+
 
 }

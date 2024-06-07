@@ -35,7 +35,7 @@ $queue = new MiddlewareQueue();
 
 Add [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*Middleware Registry*](#middleware-registry) alias.
+- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*MiddlewareRegistry*](#middleware-registry) alias.
 
 ```php
 $queue->add($middleware);
@@ -62,7 +62,7 @@ $middleware = $queue->current();
 Insert [*Middleware*](#middleware) at a specified index.
 
 - `$index` is a number representing the index.
-- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*Middleware Registry*](#middleware-registry) alias.
+- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*MiddlewareRegistry*](#middleware-registry) alias.
 
 ```php
 $queue->insertAt($index, $middleware);
@@ -88,7 +88,7 @@ $queue->next();
 
 Prepend [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*Middleware Registry*](#middleware-registry) alias.
+- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*MiddlewareRegistry*](#middleware-registry) alias.
 
 ```php
 $queue->prepend($middleware);
@@ -154,9 +154,19 @@ Map an alias to middleware.
 MiddlewareRegistry::map($alias, $middleware);
 ```
 
+**Resolve**
+
+Resolve [*Middleware*](#middleware).
+
+- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*MiddlewareRegistry*](#middleware-registry) alias.
+
+```php
+$resolvedMiddleware = MiddlewareRegistry::resolve($middleware);
+```
+
 **Use**
 
-Load a shared Middleware instance.
+Load a shared [*Middleware*](#middleware) instance.
 
 - `$alias` is a string representing the middleware alias.
 
@@ -172,10 +182,13 @@ use Fyre\Middleware\RequestHandler;
 ```
 
 - `$queue` is a [*MiddlewareQueue*](#middleware-queues).
+- `$initialResponse` is a [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses) to be used as the initial response, and will default to *null*.
 
 ```php
-$handler = new RequestHandler($queue);
+$handler = new RequestHandler($queue, $initialResponse);
 ```
+
+If the `$initialResponse` is set to *null*, a new *ClientResponse* will be created.
 
 **Handle**
 
