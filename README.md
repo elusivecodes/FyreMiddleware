@@ -158,7 +158,7 @@ MiddlewareRegistry::map($alias, $middleware);
 
 Resolve [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a [*MiddlewareRegistry*](#middleware-registry) alias.
+- `$middleware` is a [*Middleware*](#middleware) class instance or name, *Closure* or a *MiddlewareRegistry* alias.
 
 ```php
 $resolvedMiddleware = MiddlewareRegistry::resolve($middleware);
