@@ -11,7 +11,6 @@ use Tests\Mock\MockMiddleware;
 
 final class MiddlewareQueueTest extends TestCase
 {
-
     protected MiddlewareQueue $queue;
 
     public function testAdd(): void
@@ -32,16 +31,6 @@ final class MiddlewareQueueTest extends TestCase
         );
     }
 
-    public function testIteration(): void
-    {
-        foreach ($this->queue AS $middleware) {
-            $this->assertInstanceOf(
-                Middleware::class,
-                $middleware
-            );
-        }
-    }
-
     public function testInsertAt(): void
     {
         $middleware = new MockMiddleware();
@@ -53,6 +42,16 @@ final class MiddlewareQueueTest extends TestCase
             $middleware,
             $this->queue->current()
         );
+    }
+
+    public function testIteration(): void
+    {
+        foreach ($this->queue as $middleware) {
+            $this->assertInstanceOf(
+                Middleware::class,
+                $middleware
+            );
+        }
     }
 
     public function testPrepend(): void
@@ -77,8 +76,7 @@ final class MiddlewareQueueTest extends TestCase
             new MockMiddleware(),
             MockMiddleware::class,
             'mock',
-            'mock-closure'
+            'mock-closure',
         ]);
     }
-
 }

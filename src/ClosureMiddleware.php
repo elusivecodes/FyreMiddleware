@@ -14,11 +14,11 @@ use function call_user_func_array;
  */
 class ClosureMiddleware extends Middleware
 {
-
     protected Closure $callback;
 
     /**
      * New ClosureMiddleware constructor.
+     *
      * @param Closure $callback The callback.
      */
     public function __construct(Closure $callback)
@@ -28,6 +28,7 @@ class ClosureMiddleware extends Middleware
 
     /**
      * Process a ServerRequest.
+     *
      * @param ServerRequest $request The ServerRequest.
      * @param RequestHandler $handler The RequestHandler.
      * @return ClientResponse The ClientResponse.
@@ -36,5 +37,4 @@ class ClosureMiddleware extends Middleware
     {
         return call_user_func_array($this->callback, [$request, $handler]);
     }
-
 }

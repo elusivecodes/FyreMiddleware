@@ -18,28 +18,29 @@ use function count;
  */
 class MiddlewareQueue implements Countable, Iterator
 {
-
     protected int $index = 0;
 
     protected array $queue = [];
 
     /**
      * New ClosureMiddleware constructor.
+     *
      * @param array $middlewares The middleware.
      */
     public function __construct(array $middlewares = [])
     {
-        foreach ($middlewares AS $middleware) {
+        foreach ($middlewares as $middleware) {
             $this->add($middleware);
         }
     }
 
     /**
      * Add Middleware.
+     *
      * @param Middleware|Closure|string $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function add(Middleware|Closure|string $middleware): static
+    public function add(Closure|Middleware|string $middleware): static
     {
         $this->queue[] = MiddlewareRegistry::resolve($middleware);
 
@@ -48,6 +49,7 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * Get the Middleware count.
+     *
      * @return int The Middleware count.
      */
     public function count(): int
@@ -57,7 +59,9 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * Get the Middleware at the current index.
+     *
      * @return Middleware The Middleware at the current index.
+     *
      * @throws OutOfBoundsException if the index is out of bounds.
      */
     public function current(): Middleware
@@ -71,11 +75,12 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * Insert Middleware at a specified index.
+     *
      * @param int $index The index.
      * @param Middleware|Closure|string The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function insertAt(int $index, Middleware|Closure|string $middleware): static
+    public function insertAt(int $index, Closure|Middleware|string $middleware): static
     {
         array_splice($this->queue, $index, 0, [MiddlewareRegistry::resolve($middleware)]);
 
@@ -84,6 +89,7 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * Get the current index.
+     *
      * @return int The current index.
      */
     public function key(): int
@@ -101,10 +107,11 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * Prepend Middleware.
+     *
      * @param Middleware|Closure|string $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function prepend(Middleware|Closure|string $middleware): static
+    public function prepend(Closure|Middleware|string $middleware): static
     {
         array_unshift($this->queue, MiddlewareRegistry::resolve($middleware));
 
@@ -121,11 +128,11 @@ class MiddlewareQueue implements Countable, Iterator
 
     /**
      * Determine if the current index is valid.
+     *
      * @return bool TRUE if the current index is valid, otherwise FALSE.
      */
     public function valid(): bool
     {
         return array_key_exists($this->index, $this->queue);
     }
-
 }

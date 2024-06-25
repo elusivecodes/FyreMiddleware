@@ -10,7 +10,6 @@ use Fyre\Server\ServerRequest;
 
 class MockMiddleware extends Middleware
 {
-
     protected bool $loaded = false;
 
     public function isLoaded(): bool
@@ -24,5 +23,4 @@ class MockMiddleware extends Middleware
 
         return $handler->handle($request);
     }
-
 }

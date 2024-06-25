@@ -12,6 +12,19 @@ use Tests\Mock\MockMiddleware;
 
 final class RequestHandlerTest extends TestCase
 {
+    public function testInitialResponse(): void
+    {
+        $queue = new MiddlewareQueue();
+
+        $response = new ClientResponse();
+        $handler = new RequestHandler($queue, $response);
+        $request = new ServerRequest();
+
+        $this->assertSame(
+            $response,
+            $handler->handle($request)
+        );
+    }
 
     public function testRun(): void
     {
@@ -20,7 +33,7 @@ final class RequestHandlerTest extends TestCase
 
         $queue = new MiddlewareQueue([
             $middleware1,
-            $middleware2
+            $middleware2,
         ]);
 
         $handler = new RequestHandler($queue);
@@ -39,21 +52,4 @@ final class RequestHandlerTest extends TestCase
             $middleware2->isLoaded()
         );
     }
-
-    public function testInitialResponse(): void
-    {
-        $queue = new MiddlewareQueue();
-
-        $response = new ClientResponse();
-        $handler = new RequestHandler($queue, $response);
-        $request = new ServerRequest();
-
-        $this->assertSame(
-            $response,
-            $handler->handle($request)
-        );
-    }
-
-
-
 }

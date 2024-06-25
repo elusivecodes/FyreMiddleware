@@ -5,13 +5,11 @@ namespace Tests;
 
 use Fyre\Middleware\Middleware;
 use Fyre\Middleware\MiddlewareRegistry;
-use Fyre\Middleware\MiddlewareQueue;
 use PHPUnit\Framework\TestCase;
 use Tests\Mock\MockMiddleware;
 
 final class MiddlewareRegistryTest extends TestCase
 {
-
     public function testMapClassString()
     {
         MiddlewareRegistry::map('mock', MockMiddleware::class);
@@ -44,5 +42,4 @@ final class MiddlewareRegistryTest extends TestCase
     {
         MiddlewareRegistry::clear();
     }
-
 }

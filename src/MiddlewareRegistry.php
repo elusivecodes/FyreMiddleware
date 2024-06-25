@@ -15,8 +15,8 @@ use function is_subclass_of;
  */
 abstract class MiddlewareRegistry
 {
-
     protected static array $aliases = [];
+
     protected static array $middleware = [];
 
     /**
@@ -30,6 +30,7 @@ abstract class MiddlewareRegistry
 
     /**
      * Map an alias to middleware.
+     *
      * @param string $alias The middleware alias.
      * @param Closure|string The Middleware class, or a function that returns Middleware.
      */
@@ -40,10 +41,11 @@ abstract class MiddlewareRegistry
 
     /**
      * Resolve Middleware.
+     *
      * @param Middleware|Closure|string $middleware The Middleware.
      * @return Middleware The Middleware.
      */
-    public static function resolve(Middleware|Closure|string $middleware): Middleware
+    public static function resolve(Closure|Middleware|string $middleware): Middleware
     {
         if ($middleware instanceof Middleware) {
             return $middleware;
@@ -58,6 +60,7 @@ abstract class MiddlewareRegistry
 
     /**
      * Load a shared Middleware instance.
+     *
      * @param string $alias The middleware alias.
      * @return Middleware The Middleware.
      */
@@ -68,6 +71,7 @@ abstract class MiddlewareRegistry
 
     /**
      * Load a Middleware.
+     *
      * @param string $alias The middleware alias.
      * @return Middleware The Middleware.
      */
@@ -85,5 +89,4 @@ abstract class MiddlewareRegistry
 
         throw new RuntimeException('Invalid middleware: '.$middleware);
     }
-
 }
