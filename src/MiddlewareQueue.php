@@ -37,7 +37,7 @@ class MiddlewareQueue implements Countable, Iterator
     /**
      * Add Middleware.
      *
-     * @param Middleware|Closure|string $middleware The Middleware.
+     * @param Closure|Middleware|string $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
     public function add(Closure|Middleware|string $middleware): static
@@ -77,7 +77,7 @@ class MiddlewareQueue implements Countable, Iterator
      * Insert Middleware at a specified index.
      *
      * @param int $index The index.
-     * @param Middleware|Closure|string The Middleware.
+     * @param Closure|Middleware|string The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
     public function insertAt(int $index, Closure|Middleware|string $middleware): static
@@ -108,7 +108,7 @@ class MiddlewareQueue implements Countable, Iterator
     /**
      * Prepend Middleware.
      *
-     * @param Middleware|Closure|string $middleware The Middleware.
+     * @param Closure|Middleware|string $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
     public function prepend(Closure|Middleware|string $middleware): static

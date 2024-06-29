@@ -42,7 +42,7 @@ abstract class MiddlewareRegistry
     /**
      * Resolve Middleware.
      *
-     * @param Middleware|Closure|string $middleware The Middleware.
+     * @param Closure|Middleware|string $middleware The Middleware.
      * @return Middleware The Middleware.
      */
     public static function resolve(Closure|Middleware|string $middleware): Middleware
