@@ -31,10 +31,11 @@ class ClosureMiddleware extends Middleware
      *
      * @param ServerRequest $request The ServerRequest.
      * @param RequestHandler $handler The RequestHandler.
+     * @param mixed ...$args Additional arguments to pass to the callback.
      * @return ClientResponse The ClientResponse.
      */
-    public function process(ServerRequest $request, RequestHandler $handler): ClientResponse
+    public function process(ServerRequest $request, RequestHandler $handler, mixed ...$args): ClientResponse
     {
-        return call_user_func_array($this->callback, [$request, $handler]);
+        return call_user_func_array($this->callback, [$request, $handler, ...$args]);
     }
 }
