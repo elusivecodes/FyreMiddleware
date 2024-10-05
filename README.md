@@ -164,6 +164,12 @@ Resolve [*Middleware*](#middleware).
 $resolvedMiddleware = MiddlewareRegistry::resolve($middleware);
 ```
 
+You can pass additional arguments to the `handle` method of the [*Middleware*](#middleware) by appending a colon followed by a comma-separated list of arguments to the string.
+
+```php
+MiddlewareRegistry::resolve('alias:arg1,arg2');
+```
+
 **Use**
 
 Load a shared [*Middleware*](#middleware) instance.
@@ -183,9 +189,10 @@ use Fyre\Middleware\RequestHandler;
 
 - `$queue` is a [*MiddlewareQueue*](#middleware-queues).
 - `$initialResponse` is a [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses) to be used as the initial response, and will default to *null*.
+- `$beforeHandle` is a *Closure* that will run before each middleware is handled, and will default to *null*.
 
 ```php
-$handler = new RequestHandler($queue, $initialResponse);
+$handler = new RequestHandler($queue, $initialResponse, $beforeHandle);
 ```
 
 If the `$initialResponse` is set to *null*, a new *ClientResponse* will be created.
