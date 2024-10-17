@@ -8,8 +8,6 @@ use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
 use RuntimeException;
 
-use function call_user_func;
-use function call_user_func_array;
 use function class_exists;
 use function explode;
 use function is_string;
@@ -65,10 +63,7 @@ abstract class MiddlewareRegistry
             [$alias, $args] = explode(':', $middleware, 2);
             $args = explode(',', $args);
 
-            return new ClosureMiddleware(fn(ServerRequest $request, RequestHandler $handler): ClientResponse => call_user_func_array(
-                [static::use($alias), 'process'],
-                [$request, $handler, ...$args]
-            ));
+            return new ClosureMiddleware(fn(ServerRequest $request, RequestHandler $handler): ClientResponse => Closure::fromCallable([static::use($alias), 'process'])($request, $handler, ...$args));
         }
 
         return static::use($middleware);
@@ -100,7 +95,7 @@ abstract class MiddlewareRegistry
         }
 
         if ($middleware instanceof Closure) {
-            return call_user_func($middleware);
+            return $middleware();
         }
 
         throw new RuntimeException('Invalid middleware: '.$middleware);

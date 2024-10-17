@@ -7,8 +7,6 @@ use Closure;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
 
-use function call_user_func_array;
-
 /**
  * ClosureMiddleware
  */
@@ -36,6 +34,6 @@ class ClosureMiddleware extends Middleware
      */
     public function process(ServerRequest $request, RequestHandler $handler, mixed ...$args): ClientResponse
     {
-        return call_user_func_array($this->callback, [$request, $handler, ...$args]);
+        return ($this->callback)($request, $handler, ...$args);
     }
 }

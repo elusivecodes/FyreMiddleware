@@ -7,8 +7,6 @@ use Closure;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
 
-use function call_user_func_array;
-
 /**
  * RequestHandler
  */
@@ -41,7 +39,7 @@ class RequestHandler
     public function handle(ServerRequest $request): ClientResponse
     {
         if ($this->beforeHandle) {
-            call_user_func_array($this->beforeHandle, [$request]);
+            ($this->beforeHandle)($request);
         }
 
         if (!$this->queue->valid()) {
