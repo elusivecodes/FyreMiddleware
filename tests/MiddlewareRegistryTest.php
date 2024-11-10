@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Fyre\Container\Container;
 use Fyre\Middleware\Middleware;
 use Fyre\Middleware\MiddlewareRegistry;
 use PHPUnit\Framework\TestCase;
@@ -10,23 +11,25 @@ use Tests\Mock\MockMiddleware;
 
 final class MiddlewareRegistryTest extends TestCase
 {
+    protected MiddlewareRegistry $middlewareRegistry;
+
     public function testMapClassString()
     {
-        MiddlewareRegistry::map('mock', MockMiddleware::class);
+        $this->middlewareRegistry->map('mock', MockMiddleware::class);
 
         $this->assertInstanceOf(
             MockMiddleware::class,
-            MiddlewareRegistry::use('mock')
+            $this->middlewareRegistry->use('mock')
         );
     }
 
     public function testMapClosure()
     {
-        MiddlewareRegistry::map('mock', fn(): Middleware => new MockMiddleware());
+        $this->middlewareRegistry->map('mock', fn(): Middleware => new MockMiddleware());
 
         $this->assertInstanceOf(
             MockMiddleware::class,
-            MiddlewareRegistry::use('mock')
+            $this->middlewareRegistry->use('mock')
         );
     }
 
@@ -34,12 +37,14 @@ final class MiddlewareRegistryTest extends TestCase
     {
         $this->assertInstanceOf(
             MockMiddleware::class,
-            MiddlewareRegistry::use(MockMiddleware::class)
+            $this->middlewareRegistry->use(MockMiddleware::class)
         );
     }
 
     protected function setUp(): void
     {
-        MiddlewareRegistry::clear();
+        $container = new Container();
+
+        $this->middlewareRegistry = $container->build(MiddlewareRegistry::class);
     }
 }

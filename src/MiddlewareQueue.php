@@ -42,7 +42,7 @@ class MiddlewareQueue implements Countable, Iterator
      */
     public function add(Closure|Middleware|string $middleware): static
     {
-        $this->queue[] = MiddlewareRegistry::resolve($middleware);
+        $this->queue[] = $middleware;
 
         return $this;
     }
@@ -60,11 +60,11 @@ class MiddlewareQueue implements Countable, Iterator
     /**
      * Get the Middleware at the current index.
      *
-     * @return Middleware The Middleware at the current index.
+     * @return Closure|Middleware|string The Middleware at the current index.
      *
      * @throws OutOfBoundsException if the index is out of bounds.
      */
-    public function current(): Middleware
+    public function current(): Closure|Middleware|string
     {
         if (!$this->valid()) {
             throw new OutOfBoundsException('Invalid middleware at index: '.$this->index);
@@ -82,7 +82,7 @@ class MiddlewareQueue implements Countable, Iterator
      */
     public function insertAt(int $index, Closure|Middleware|string $middleware): static
     {
-        array_splice($this->queue, $index, 0, [MiddlewareRegistry::resolve($middleware)]);
+        array_splice($this->queue, $index, 0, [$middleware]);
 
         return $this;
     }
@@ -113,7 +113,7 @@ class MiddlewareQueue implements Countable, Iterator
      */
     public function prepend(Closure|Middleware|string $middleware): static
     {
-        array_unshift($this->queue, MiddlewareRegistry::resolve($middleware));
+        array_unshift($this->queue, $middleware);
 
         return $this;
     }
@@ -127,7 +127,7 @@ class MiddlewareQueue implements Countable, Iterator
     }
 
     /**
-     * Determine if the current index is valid.
+     * Determine whether the current index is valid.
      *
      * @return bool TRUE if the current index is valid, otherwise FALSE.
      */

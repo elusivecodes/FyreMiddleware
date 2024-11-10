@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fyre\Middleware;
 
 use Closure;
+use Fyre\Container\Container;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
 use RuntimeException;
@@ -17,19 +18,31 @@ use function str_contains;
 /**
  * MiddlewareRegistry
  */
-abstract class MiddlewareRegistry
+class MiddlewareRegistry
 {
-    protected static array $aliases = [];
+    protected array $aliases = [];
 
-    protected static array $middleware = [];
+    protected Container $container;
+
+    protected array $middleware = [];
+
+    /**
+     * New MiddlewareRegistry constructor.
+     *
+     * @param Container $container The Container.
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Clear all aliases and middleware.
      */
-    public static function clear(): void
+    public function clear(): void
     {
-        static::$aliases = [];
-        static::$middleware = [];
+        $this->aliases = [];
+        $this->middleware = [];
     }
 
     /**
@@ -37,10 +50,13 @@ abstract class MiddlewareRegistry
      *
      * @param string $alias The middleware alias.
      * @param Closure|string The Middleware class, or a function that returns Middleware.
+     * @return MiddlewareRegistry The MiddlewareRegistry.
      */
-    public static function map(string $alias, Closure|string $middleware): void
+    public function map(string $alias, Closure|string $middleware): static
     {
-        static::$aliases[$alias] = $middleware;
+        $this->aliases[$alias] = $middleware;
+
+        return $this;
     }
 
     /**
@@ -49,7 +65,7 @@ abstract class MiddlewareRegistry
      * @param Closure|Middleware|string $middleware The Middleware.
      * @return Middleware The Middleware.
      */
-    public static function resolve(Closure|Middleware|string $middleware): Middleware
+    public function resolve(Closure|Middleware|string $middleware): Middleware
     {
         if ($middleware instanceof Middleware) {
             return $middleware;
@@ -63,10 +79,12 @@ abstract class MiddlewareRegistry
             [$alias, $args] = explode(':', $middleware, 2);
             $args = explode(',', $args);
 
-            return new ClosureMiddleware(fn(ServerRequest $request, RequestHandler $handler): ClientResponse => Closure::fromCallable([static::use($alias), 'process'])($request, $handler, ...$args));
+            return new ClosureMiddleware(
+                fn(ServerRequest $request, RequestHandler $handler): ClientResponse => $this->use($alias)->process($request, $handler, ...$args)
+            );
         }
 
-        return static::use($middleware);
+        return $this->use($middleware);
     }
 
     /**
@@ -75,27 +93,27 @@ abstract class MiddlewareRegistry
      * @param string $alias The middleware alias.
      * @return Middleware The Middleware.
      */
-    public static function use(string $alias): Middleware
+    public function use(string $alias): Middleware
     {
-        return static::$middleware[$alias] ??= static::load($alias);
+        return $this->middleware[$alias] ??= $this->build($alias);
     }
 
     /**
-     * Load a Middleware.
+     * Build a Middleware.
      *
      * @param string $alias The middleware alias.
      * @return Middleware The Middleware.
      */
-    protected static function load(string $alias): Middleware
+    protected function build(string $alias): Middleware
     {
-        $middleware = static::$aliases[$alias] ?? $alias;
+        $middleware = $this->aliases[$alias] ?? $alias;
 
         if (is_string($middleware) && class_exists($middleware) && is_subclass_of($middleware, Middleware::class)) {
-            return new $middleware();
+            return $this->container->build($middleware);
         }
 
         if ($middleware instanceof Closure) {
-            return $middleware();
+            return $this->container->call($middleware);
         }
 
         throw new RuntimeException('Invalid middleware: '.$middleware);

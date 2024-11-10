@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\Middleware;
 
-use Closure;
+use Fyre\Container\Container;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
 
@@ -12,9 +12,11 @@ use Fyre\Server\ServerRequest;
  */
 class RequestHandler
 {
-    protected Closure|null $beforeHandle = null;
+    protected Container $container;
 
     protected ClientResponse $initialResponse;
+
+    protected MiddlewareRegistry $middlewareRegistry;
 
     protected MiddlewareQueue $queue;
 
@@ -23,11 +25,12 @@ class RequestHandler
      *
      * @param MiddlewareQueue $queue The MiddlewareQueue.
      */
-    public function __construct(MiddlewareQueue $queue, ClientResponse|null $initialResponse = null, Closure|null $beforeHandle = null)
+    public function __construct(Container $container, MiddlewareRegistry $middlewareRegistry, MiddlewareQueue $queue, ClientResponse|null $initialResponse = null)
     {
+        $this->container = $container;
+        $this->middlewareRegistry = $middlewareRegistry;
         $this->queue = $queue;
-        $this->initialResponse = $initialResponse ?? new ClientResponse();
-        $this->beforeHandle = $beforeHandle;
+        $this->initialResponse = $initialResponse;
     }
 
     /**
@@ -38,17 +41,15 @@ class RequestHandler
      */
     public function handle(ServerRequest $request): ClientResponse
     {
-        if ($this->beforeHandle) {
-            ($this->beforeHandle)($request);
-        }
+        $this->container->instance(ServerRequest::class, $request);
 
         if (!$this->queue->valid()) {
-            return $this->initialResponse;
+            return $this->initialResponse ?? $this->container->build(ClientResponse::class);
         }
 
         $middleware = $this->queue->current();
         $this->queue->next();
 
-        return $middleware->process($request, $this);
+        return $this->middlewareRegistry->resolve($middleware)->process($request, $this);
     }
 }

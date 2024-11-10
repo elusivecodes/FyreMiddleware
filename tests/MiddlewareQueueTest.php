@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Fyre\Container\Container;
 use Fyre\Middleware\Middleware;
 use Fyre\Middleware\MiddlewareQueue;
 use Fyre\Middleware\MiddlewareRegistry;
@@ -11,6 +12,8 @@ use Tests\Mock\MockMiddleware;
 
 final class MiddlewareQueueTest extends TestCase
 {
+    protected MiddlewareRegistry $middlewareRegistry;
+
     protected MiddlewareQueue $queue;
 
     public function testAdd(): void
@@ -49,7 +52,7 @@ final class MiddlewareQueueTest extends TestCase
         foreach ($this->queue as $middleware) {
             $this->assertInstanceOf(
                 Middleware::class,
-                $middleware
+                $this->middlewareRegistry->resolve($middleware)
             );
         }
     }
@@ -68,9 +71,11 @@ final class MiddlewareQueueTest extends TestCase
 
     protected function setUp(): void
     {
-        MiddlewareRegistry::clear();
-        MiddlewareRegistry::map('mock', MockMiddleware::class);
-        MiddlewareRegistry::map('mock-closure', fn(): Middleware => new MockMiddleware());
+        $container = new Container();
+
+        $this->middlewareRegistry = $container->build(MiddlewareRegistry::class);
+        $this->middlewareRegistry->map('mock', MockMiddleware::class);
+        $this->middlewareRegistry->map('mock-closure', fn(): Middleware => new MockMiddleware());
 
         $this->queue = new MiddlewareQueue([
             new MockMiddleware(),

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Fyre\Container\Container;
 use Fyre\Middleware\Middleware;
 use Fyre\Middleware\MiddlewareQueue;
 use Fyre\Middleware\MiddlewareRegistry;
@@ -15,12 +16,16 @@ use Tests\Mock\MockMiddleware;
 
 final class RequestHandlerTest extends TestCase
 {
+    protected Container $container;
+
+    protected MiddlewareRegistry $middlewareRegistry;
+
     public function testInitialResponse(): void
     {
         $queue = new MiddlewareQueue();
 
         $response = new ClientResponse();
-        $handler = new RequestHandler($queue, $response);
+        $handler = $this->container->build(RequestHandler::class, ['queue' => $queue, 'initialResponse' => $response]);
         $request = new ServerRequest();
 
         $this->assertSame(
@@ -39,10 +44,7 @@ final class RequestHandlerTest extends TestCase
             $middleware2,
         ]);
 
-        $i = 0;
-        $handler = new RequestHandler($queue, null, function(ServerRequest $request) use (&$i): void {
-            $i++;
-        });
+        $handler = $this->container->build(RequestHandler::class, ['queue' => $queue]);
         $request = new ServerRequest();
 
         $this->assertInstanceOf(
@@ -59,20 +61,20 @@ final class RequestHandlerTest extends TestCase
         );
 
         $this->assertSame(
-            3,
-            $i
+            $request,
+            $this->container->use(ServerRequest::class)
         );
     }
 
     public function testRunMapClosureWithArgs()
     {
-        MiddlewareRegistry::map('mock', fn(): Middleware => new ArgsMiddleware());
+        $this->middlewareRegistry->map('mock', fn(): Middleware => new ArgsMiddleware());
 
         $queue = new MiddlewareQueue([
             'mock:1,2,3',
         ]);
 
-        $handler = new RequestHandler($queue);
+        $handler = $this->container->build(RequestHandler::class, ['queue' => $queue]);
         $request = new ServerRequest();
 
         $response = $handler->handle($request);
@@ -89,13 +91,13 @@ final class RequestHandlerTest extends TestCase
 
     public function testRunMapWithArgs()
     {
-        MiddlewareRegistry::map('mock', ArgsMiddleware::class);
+        $this->middlewareRegistry->map('mock', ArgsMiddleware::class);
 
         $queue = new MiddlewareQueue([
             'mock:1,2,3',
         ]);
 
-        $handler = new RequestHandler($queue);
+        $handler = $this->container->build(RequestHandler::class, ['queue' => $queue]);
         $request = new ServerRequest();
 
         $response = $handler->handle($request);
@@ -108,5 +110,13 @@ final class RequestHandlerTest extends TestCase
 ]',
             $response->getBody()
         );
+    }
+
+    protected function setUp(): void
+    {
+        $this->container = new Container();
+        $this->container->singleton(MiddlewareRegistry::class);
+
+        $this->middlewareRegistry = $this->container->use(MiddlewareRegistry::class);
     }
 }
