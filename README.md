@@ -65,9 +65,10 @@ Map an alias to middleware.
 
 - `$alias` is a string representing the middleware alias.
 - `$middleware` is a string representing the [*Middleware*](#middleware) class name, or a closure that returns an instance of a [*Middleware*](middleware) class.
+- `$arguments` is an array containing additional arguments for creating the [*Middleware*](#middleware), and will default to *[]*.
 
 ```php
-$middlewareRegistry->map($alias, $middleware);
+$middlewareRegistry->map($alias, $middleware, $arguments);
 ```
 
 **Resolve**
@@ -117,7 +118,7 @@ $queue = new MiddlewareQueue($middlewares);
 
 Add [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware) class instance, class name name, alias or *Closure*.
+- `$middleware` is a [*Middleware*](#middleware) class instance, class name name, alias or [*Closure*](#closures).
 
 ```php
 $queue->add($middleware);
@@ -144,7 +145,7 @@ $middleware = $queue->current();
 Insert [*Middleware*](#middleware) at a specified index.
 
 - `$index` is a number representing the index.
-- `$middleware` is a [*Middleware*](#middleware) class instance, class name name, alias or *Closure*.
+- `$middleware` is a [*Middleware*](#middleware) class instance, class name name, alias or [*Closure*](#closures).
 
 ```php
 $queue->insertAt($index, $middleware);
@@ -170,7 +171,7 @@ $queue->next();
 
 Prepend [*Middleware*](#middleware).
 
-- `$middleware` is a [*Middleware*](#middleware) class instance, class name name, alias or *Closure*.
+- `$middleware` is a [*Middleware*](#middleware) class instance, class name name, alias or [*Closure*](#closures).
 
 ```php
 $queue->prepend($middleware);
@@ -197,18 +198,27 @@ $valid = $queue->valid();
 
 Custom middleware can be created by extending `\Fyre\Middleware\Middleware`, ensuring all below methods are implemented.
 
-**Process**
+**Invoke**
 
 - `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
-- `$handler` is a [*RequestHandler*](#request-handlers).
+- `$next` is a *Closure*.
 
 ```php
-$response = $middleware->process($request, $handler);
+$response = $middleware->__invoke($request, $next);
 ```
 
-This method will return a [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).
+This method should call the `$next` callback with the `$request`, to handle the next middleware in the queue, then return the [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).
 
-The implemented method should call the `handle` method of the [*RequestHandler*](#request-handlers) to handle the next middleware in the queue.
+
+### Closures
+
+You can also provide custom middleware as a simple *Closure*.
+
+```php
+$middleware = function(ServerRequest $request, Closure $next): ClientResponse {
+    return $next($request);
+};
+```
 
 
 ## Request Handlers
@@ -218,7 +228,7 @@ use Fyre\Middleware\RequestHandler;
 ```
 
 - `$container` is a [*Container*](https://github.com/elusivecodes/FyreContainer).
-- `$middlewareRegistry` is a *MiddlewareRegistry*.
+- `$middlewareRegistry` is a [*MiddlewareRegistry*](#basic-usage).
 - `$queue` is a [*MiddlewareQueue*](#middleware-queues).
 - `$initialResponse` is a [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses) to be used as the initial response, and will default to *null*.
 

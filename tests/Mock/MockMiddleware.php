@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Tests\Mock;
 
+use Closure;
 use Fyre\Middleware\Middleware;
-use Fyre\Middleware\RequestHandler;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
 
@@ -12,15 +12,15 @@ class MockMiddleware extends Middleware
 {
     protected bool $loaded = false;
 
-    public function isLoaded(): bool
-    {
-        return $this->loaded;
-    }
-
-    public function process(ServerRequest $request, RequestHandler $handler): ClientResponse
+    public function __invoke(ServerRequest $request, Closure $next): ClientResponse
     {
         $this->loaded = true;
 
-        return $handler->handle($request);
+        return $next($request);
+    }
+
+    public function isLoaded(): bool
+    {
+        return $this->loaded;
     }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\Middleware;
 
+use Closure;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
 
@@ -15,8 +16,8 @@ abstract class Middleware
      * Process a ServerRequest.
      *
      * @param ServerRequest $request The ServerRequest.
-     * @param RequestHandler $handler The RequestHandler.
+     * @param Closure $next The next handler.
      * @return ClientResponse The ClientResponse.
      */
-    abstract public function process(ServerRequest $request, RequestHandler $handler): ClientResponse;
+    abstract public function __invoke(ServerRequest $request, Closure $next): ClientResponse;
 }

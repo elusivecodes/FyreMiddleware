@@ -49,12 +49,21 @@ class MiddlewareRegistry
      * Map an alias to middleware.
      *
      * @param string $alias The middleware alias.
-     * @param Closure|string The Middleware class, or a function that returns Middleware.
+     * @param Closure|string $middleware The Middleware class, or a function that returns Middleware.
+     * @param array $arguments Additional arguments for the Middleware.
      * @return MiddlewareRegistry The MiddlewareRegistry.
      */
-    public function map(string $alias, Closure|string $middleware): static
+    public function map(string $alias, Closure|string $middleware, array $arguments = []): static
     {
-        $this->aliases[$alias] = $middleware;
+        if (!is_string($middleware)) {
+            $this->aliases[$alias] = fn(): Middleware => $this->container->call($middleware, $arguments);
+        } else if ($arguments !== []) {
+            $this->aliases[$alias] = fn(): Middleware => $this->container->build($middleware, $arguments);
+        } else {
+            $this->aliases[$alias] = $middleware;
+        }
+
+        unset($this->middleware[$alias]);
 
         return $this;
     }
@@ -63,28 +72,23 @@ class MiddlewareRegistry
      * Resolve Middleware.
      *
      * @param Closure|Middleware|string $middleware The Middleware.
-     * @return Middleware The Middleware.
+     * @return Closure|Middleware The Middleware.
      */
-    public function resolve(Closure|Middleware|string $middleware): Middleware
+    public function resolve(Closure|Middleware|string $middleware): Closure|Middleware
     {
-        if ($middleware instanceof Middleware) {
-            return $middleware;
-        }
+        if (is_string($middleware)) {
+            if (!str_contains($middleware, ':')) {
+                return $this->use($middleware);
+            }
 
-        if ($middleware instanceof Closure) {
-            return new ClosureMiddleware($middleware);
-        }
-
-        if (str_contains($middleware, ':')) {
             [$alias, $args] = explode(':', $middleware, 2);
+            $middleware = $this->use($alias);
             $args = explode(',', $args);
 
-            return new ClosureMiddleware(
-                fn(ServerRequest $request, RequestHandler $handler): ClientResponse => $this->use($alias)->process($request, $handler, ...$args)
-            );
+            return fn(ServerRequest $request, Closure $next): ClientResponse => $middleware($request, $next, ...$args);
         }
 
-        return $this->use($middleware);
+        return $middleware;
     }
 
     /**
@@ -102,9 +106,9 @@ class MiddlewareRegistry
      * Build a Middleware.
      *
      * @param string $alias The middleware alias.
-     * @return Middleware The Middleware.
+     * @return Closure|Middleware The Middleware.
      */
-    protected function build(string $alias): Middleware
+    protected function build(string $alias): Closure|Middleware
     {
         $middleware = $this->aliases[$alias] ?? $alias;
 
@@ -113,7 +117,7 @@ class MiddlewareRegistry
         }
 
         if ($middleware instanceof Closure) {
-            return $this->container->call($middleware);
+            return $middleware();
         }
 
         throw new RuntimeException('Invalid middleware: '.$middleware);

@@ -50,6 +50,9 @@ class RequestHandler
         $middleware = $this->queue->current();
         $this->queue->next();
 
-        return $this->middlewareRegistry->resolve($middleware)->process($request, $this);
+        return $this->middlewareRegistry->resolve($middleware)(
+            $request,
+            fn(ServerRequest $request): ClientResponse => $this->handle($request)
+        );
     }
 }
