@@ -232,7 +232,7 @@ Any dependencies will be injected automatically when loading from the [*Containe
 $handler = $container->use(RequestHandler::class, 'queue' => $queue);
 ```
 
-If the `$initialResponse` is set to *null*, a new *ClientResponse* will be created.
+If the `$initialResponse` is set to *null*, a new [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses) will be created.
 
 **Handle**
 
