@@ -12,7 +12,7 @@ class MockMiddleware extends Middleware
 {
     protected bool $loaded = false;
 
-    public function __invoke(ServerRequest $request, Closure $next): ClientResponse
+    public function handle(ServerRequest $request, Closure $next): ClientResponse
     {
         $this->loaded = true;
 

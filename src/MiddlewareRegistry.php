@@ -85,6 +85,10 @@ class MiddlewareRegistry
             $middleware = $this->use($alias);
             $args = explode(',', $args);
 
+            if ($middleware instanceof Middleware) {
+                $middleware = $middleware->handle(...);
+            }
+
             return fn(ServerRequest $request, Closure $next): ClientResponse => $middleware($request, $next, ...$args);
         }
 
@@ -95,9 +99,9 @@ class MiddlewareRegistry
      * Load a shared Middleware instance.
      *
      * @param string $alias The middleware alias.
-     * @return Middleware The Middleware.
+     * @return Closure|Middleware The Middleware.
      */
-    public function use(string $alias): Middleware
+    public function use(string $alias): Closure|Middleware
     {
         return $this->middleware[$alias] ??= $this->build($alias);
     }

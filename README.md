@@ -198,13 +198,13 @@ $valid = $queue->valid();
 
 Custom middleware can be created by extending `\Fyre\Middleware\Middleware`, ensuring all below methods are implemented.
 
-**Invoke**
+**Handle**
 
 - `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 - `$next` is a *Closure*.
 
 ```php
-$response = $middleware->__invoke($request, $next);
+$response = $middleware->handle($request, $next);
 ```
 
 This method should call the `$next` callback with the `$request`, to handle the next middleware in the queue, then return the [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).

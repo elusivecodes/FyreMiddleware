@@ -20,13 +20,13 @@ class ArgsMiddleware extends Middleware
         $this->b = $b;
     }
 
-    public function __invoke(ServerRequest $request, Closure $next, string ...$args): ClientResponse
-    {
-        return $next($request)->setJson($args);
-    }
-
     public function getArgs(): array
     {
         return [$this->a, $this->b];
+    }
+
+    public function handle(ServerRequest $request, Closure $next, string ...$args): ClientResponse
+    {
+        return $next($request)->setJson($args);
     }
 }

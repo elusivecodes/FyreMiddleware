@@ -47,10 +47,15 @@ class RequestHandler
             return $this->initialResponse ?? $this->container->build(ClientResponse::class);
         }
 
-        $middleware = $this->queue->current();
+        $middleware = $this->middlewareRegistry->resolve($this->queue->current());
+
         $this->queue->next();
 
-        return $this->middlewareRegistry->resolve($middleware)(
+        if ($middleware instanceof Middleware) {
+            $middleware = $middleware->handle(...);
+        }
+
+        return $middleware(
             $request,
             fn(ServerRequest $request): ClientResponse => $this->handle($request)
         );

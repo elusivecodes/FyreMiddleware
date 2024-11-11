@@ -19,5 +19,5 @@ abstract class Middleware
      * @param Closure $next The next handler.
      * @return ClientResponse The ClientResponse.
      */
-    abstract public function __invoke(ServerRequest $request, Closure $next): ClientResponse;
+    abstract public function handle(ServerRequest $request, Closure $next): ClientResponse;
 }
