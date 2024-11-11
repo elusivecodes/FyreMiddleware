@@ -200,6 +200,8 @@ Custom middleware can be created by extending `\Fyre\Middleware\Middleware`, ens
 
 **Handle**
 
+Handle a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
+
 - `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 - `$next` is a *Closure*.
 
