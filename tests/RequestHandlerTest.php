@@ -26,7 +26,7 @@ final class RequestHandlerTest extends TestCase
 
         $response = new ClientResponse();
         $handler = $this->container->build(RequestHandler::class, ['queue' => $queue, 'initialResponse' => $response]);
-        $request = new ServerRequest();
+        $request = $this->container->build(ServerRequest::class);
 
         $this->assertSame(
             $response,
@@ -45,7 +45,7 @@ final class RequestHandlerTest extends TestCase
         ]);
 
         $handler = $this->container->build(RequestHandler::class, ['queue' => $queue]);
-        $request = new ServerRequest();
+        $request = $this->container->build(ServerRequest::class);
 
         $this->assertInstanceOf(
             ClientResponse::class,
@@ -75,7 +75,7 @@ final class RequestHandlerTest extends TestCase
         ]);
 
         $handler = $this->container->build(RequestHandler::class, ['queue' => $queue]);
-        $request = new ServerRequest();
+        $request = $this->container->build(ServerRequest::class);
 
         $response = $handler->handle($request);
 
@@ -98,7 +98,7 @@ final class RequestHandlerTest extends TestCase
         ]);
 
         $handler = $this->container->build(RequestHandler::class, ['queue' => $queue]);
-        $request = new ServerRequest();
+        $request = $this->container->build(ServerRequest::class);
 
         $response = $handler->handle($request);
 
