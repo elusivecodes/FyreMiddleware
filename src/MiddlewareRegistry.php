@@ -56,9 +56,9 @@ class MiddlewareRegistry
     public function map(string $alias, Closure|string $middleware, array $arguments = []): static
     {
         if (!is_string($middleware)) {
-            $this->aliases[$alias] = fn(): Middleware => $this->container->call($middleware, $arguments);
+            $this->aliases[$alias] = fn(): Closure|Middleware => $this->container->call($middleware, $arguments);
         } else if ($arguments !== []) {
-            $this->aliases[$alias] = fn(): Middleware => $this->container->build($middleware, $arguments);
+            $this->aliases[$alias] = fn(): Closure|Middleware => $this->container->build($middleware, $arguments);
         } else {
             $this->aliases[$alias] = $middleware;
         }
