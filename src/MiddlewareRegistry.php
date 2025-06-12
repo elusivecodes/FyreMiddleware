@@ -22,8 +22,6 @@ class MiddlewareRegistry
 {
     protected array $aliases = [];
 
-    protected Container $container;
-
     protected array $middleware = [];
 
     /**
@@ -31,10 +29,9 @@ class MiddlewareRegistry
      *
      * @param Container $container The Container.
      */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        protected Container $container
+    ) {}
 
     /**
      * Clear all aliases and middleware.

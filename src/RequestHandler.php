@@ -12,26 +12,17 @@ use Fyre\Server\ServerRequest;
  */
 class RequestHandler
 {
-    protected Container $container;
-
-    protected ClientResponse $initialResponse;
-
-    protected MiddlewareRegistry $middlewareRegistry;
-
-    protected MiddlewareQueue $queue;
-
     /**
      * New RequestHandler constructor.
      *
      * @param MiddlewareQueue $queue The MiddlewareQueue.
      */
-    public function __construct(Container $container, MiddlewareRegistry $middlewareRegistry, MiddlewareQueue $queue, ClientResponse|null $initialResponse = null)
-    {
-        $this->container = $container;
-        $this->middlewareRegistry = $middlewareRegistry;
-        $this->queue = $queue;
-        $this->initialResponse = $initialResponse;
-    }
+    public function __construct(
+        protected Container $container,
+        protected MiddlewareRegistry $middlewareRegistry,
+        protected MiddlewareQueue $queue,
+        protected ClientResponse|null $initialResponse = null
+    ) {}
 
     /**
      * Handle the next middleware in the queue.

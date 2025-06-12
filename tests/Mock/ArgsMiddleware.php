@@ -10,15 +10,10 @@ use Fyre\Server\ServerRequest;
 
 class ArgsMiddleware extends Middleware
 {
-    protected int|null $a = null;
-
-    protected int|null $b = null;
-
-    public function __construct(int|null $a = null, int|null $b = null)
-    {
-        $this->a = $a;
-        $this->b = $b;
-    }
+    public function __construct(
+        protected int|null $a = null,
+        protected int|null $b = null
+    ) {}
 
     public function getArgs(): array
     {
