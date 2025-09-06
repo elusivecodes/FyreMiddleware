@@ -5,6 +5,7 @@ namespace Fyre\Middleware;
 
 use Closure;
 use Countable;
+use Fyre\Utility\Traits\MacroTrait;
 use Iterator;
 use OutOfBoundsException;
 
@@ -18,6 +19,8 @@ use function count;
  */
 class MiddlewareQueue implements Countable, Iterator
 {
+    use MacroTrait;
+
     protected int $index = 0;
 
     protected array $queue = [];

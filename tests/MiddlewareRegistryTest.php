@@ -6,13 +6,29 @@ namespace Tests;
 use Fyre\Container\Container;
 use Fyre\Middleware\Middleware;
 use Fyre\Middleware\MiddlewareRegistry;
+use Fyre\Utility\Traits\MacroTrait;
 use PHPUnit\Framework\TestCase;
 use Tests\Mock\ArgsMiddleware;
 use Tests\Mock\MockMiddleware;
 
+use function class_uses;
+
 final class MiddlewareRegistryTest extends TestCase
 {
     protected MiddlewareRegistry $middlewareRegistry;
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(MiddlewareRegistry::class)
+        );
+
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(Middleware::class)
+        );
+    }
 
     public function testMapClassString()
     {

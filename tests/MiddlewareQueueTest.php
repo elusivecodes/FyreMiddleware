@@ -7,8 +7,11 @@ use Fyre\Container\Container;
 use Fyre\Middleware\Middleware;
 use Fyre\Middleware\MiddlewareQueue;
 use Fyre\Middleware\MiddlewareRegistry;
+use Fyre\Utility\Traits\MacroTrait;
 use PHPUnit\Framework\TestCase;
 use Tests\Mock\MockMiddleware;
+
+use function class_uses;
 
 final class MiddlewareQueueTest extends TestCase
 {
@@ -55,6 +58,14 @@ final class MiddlewareQueueTest extends TestCase
                 $this->middlewareRegistry->resolve($middleware)
             );
         }
+    }
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(MiddlewareQueue::class)
+        );
     }
 
     public function testPrepend(): void

@@ -10,9 +10,12 @@ use Fyre\Middleware\MiddlewareRegistry;
 use Fyre\Middleware\RequestHandler;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 use PHPUnit\Framework\TestCase;
 use Tests\Mock\ArgsMiddleware;
 use Tests\Mock\MockMiddleware;
+
+use function class_uses;
 
 final class RequestHandlerTest extends TestCase
 {
@@ -31,6 +34,14 @@ final class RequestHandlerTest extends TestCase
         $this->assertSame(
             $response,
             $handler->handle($request)
+        );
+    }
+
+    public function testMacroable(): void
+    {
+        $this->assertContains(
+            MacroTrait::class,
+            class_uses(RequestHandler::class)
         );
     }
 

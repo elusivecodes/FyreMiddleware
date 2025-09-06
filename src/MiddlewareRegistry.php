@@ -7,6 +7,7 @@ use Closure;
 use Fyre\Container\Container;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 use RuntimeException;
 
 use function class_exists;
@@ -20,6 +21,8 @@ use function str_contains;
  */
 class MiddlewareRegistry
 {
+    use MacroTrait;
+
     protected array $aliases = [];
 
     protected array $middleware = [];

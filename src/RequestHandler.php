@@ -6,12 +6,15 @@ namespace Fyre\Middleware;
 use Fyre\Container\Container;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 
 /**
  * RequestHandler
  */
 class RequestHandler
 {
+    use MacroTrait;
+
     /**
      * New RequestHandler constructor.
      *

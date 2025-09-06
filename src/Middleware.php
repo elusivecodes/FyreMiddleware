@@ -6,12 +6,15 @@ namespace Fyre\Middleware;
 use Closure;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
+use Fyre\Utility\Traits\MacroTrait;
 
 /**
  * Middleware
  */
 abstract class Middleware
 {
+    use MacroTrait;
+
     /**
      * Handle a ServerRequest.
      *
