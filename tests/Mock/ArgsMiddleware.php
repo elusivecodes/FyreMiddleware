@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Tests\Mock;
 
-use Closure;
 use Fyre\Middleware\Middleware;
-use Fyre\Server\ClientResponse;
-use Fyre\Server\ServerRequest;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 class ArgsMiddleware extends Middleware
 {
@@ -20,8 +20,8 @@ class ArgsMiddleware extends Middleware
         return [$this->a, $this->b];
     }
 
-    public function handle(ServerRequest $request, Closure $next, string ...$args): ClientResponse
+    public function process(RequestInterface $request, RequestHandlerInterface $handler, string ...$args): ResponseInterface
     {
-        return $next($request)->setJson($args);
+        return $handler->handle($request)->withJson($args);
     }
 }

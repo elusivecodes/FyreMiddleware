@@ -7,11 +7,15 @@ use Fyre\Container\Container;
 use Fyre\Server\ClientResponse;
 use Fyre\Server\ServerRequest;
 use Fyre\Utility\Traits\MacroTrait;
+use Override;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * RequestHandler
  */
-class RequestHandler
+class RequestHandler implements RequestHandlerInterface
 {
     use MacroTrait;
 
@@ -24,18 +28,21 @@ class RequestHandler
         protected Container $container,
         protected MiddlewareRegistry $middlewareRegistry,
         protected MiddlewareQueue $queue,
-        protected ClientResponse|null $initialResponse = null
+        protected ResponseInterface|null $initialResponse = null
     ) {}
 
     /**
      * Handle the next middleware in the queue.
      *
-     * @param ServerRequest $request The ServerRequest.
-     * @return ClientResponse The ClientResponse.
+     * @param ServerRequestInterface $request The ServerRequestInterface.
+     * @return ResponseInterface The ClientResponse.
      */
-    public function handle(ServerRequest $request): ClientResponse
+    #[Override]
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->container->instance(ServerRequest::class, $request);
+        if ($request instanceof ServerRequest) {
+            $this->container->instance(ServerRequest::class, $request);
+        }
 
         if (!$this->queue->valid()) {
             return $this->initialResponse ?? $this->container->build(ClientResponse::class);
@@ -46,12 +53,9 @@ class RequestHandler
         $this->queue->next();
 
         if ($middleware instanceof Middleware) {
-            $middleware = $middleware->handle(...);
+            $middleware = $middleware->process(...);
         }
 
-        return $middleware(
-            $request,
-            fn(ServerRequest $request): ClientResponse => $this->handle($request)
-        );
+        return $middleware($request, $this);
     }
 }

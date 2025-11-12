@@ -198,18 +198,18 @@ $valid = $queue->valid();
 
 Custom middleware can be created by extending `\Fyre\Middleware\Middleware`, ensuring all below methods are implemented.
 
-**Handle**
+**Process**
 
-Handle a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
+Process a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
 
 - `$request` is a [*ServerRequest*](https://github.com/elusivecodes/FyreServer#server-requests).
-- `$next` is a *Closure*.
+- `$handler` is a [*RequestHandler*](#request-handlers).
 
 ```php
-$response = $middleware->handle($request, $next);
+$response = $middleware->process($request, $handler);
 ```
 
-This method should call the `$next` callback with the `$request`, to handle the next middleware in the queue, then return the [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).
+This method should call the `handle` method of the `$handler` with the `$request`, to handle the next middleware in the queue, then return the [*ClientResponse*](https://github.com/elusivecodes/FyreServer#client-responses).
 
 
 ### Closures
@@ -217,8 +217,8 @@ This method should call the `$next` callback with the `$request`, to handle the 
 You can also provide custom middleware as a simple *Closure*.
 
 ```php
-$middleware = function(ServerRequest $request, Closure $next): ClientResponse {
-    return $next($request);
+$middleware = function(ServerRequest $request, RequestHandler $handler): ClientResponse {
+    return $handler->handle($request);
 };
 ```
 

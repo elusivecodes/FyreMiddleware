@@ -3,24 +3,27 @@ declare(strict_types=1);
 
 namespace Fyre\Middleware;
 
-use Closure;
-use Fyre\Server\ClientResponse;
-use Fyre\Server\ServerRequest;
 use Fyre\Utility\Traits\MacroTrait;
+use Override;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Middleware
  */
-abstract class Middleware
+abstract class Middleware implements MiddlewareInterface
 {
     use MacroTrait;
 
     /**
-     * Handle a ServerRequest.
+     * Process a ServerRequest.
      *
-     * @param ServerRequest $request The ServerRequest.
-     * @param Closure $next The next handler.
-     * @return ClientResponse The ClientResponse.
+     * @param RequestInterface $request The Request.
+     * @param RequestHandlerInterface $handler The RequestHandler.
+     * @return ResponseInterface The Response.
      */
-    abstract public function handle(ServerRequest $request, Closure $next): ClientResponse;
+    #[Override]
+    abstract public function process(RequestInterface $request, RequestHandlerInterface $handler): ResponseInterface;
 }

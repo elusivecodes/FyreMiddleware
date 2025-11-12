@@ -8,6 +8,7 @@ use Countable;
 use Fyre\Utility\Traits\MacroTrait;
 use Iterator;
 use OutOfBoundsException;
+use Psr\Http\Server\MiddlewareInterface;
 
 use function array_key_exists;
 use function array_splice;
@@ -40,10 +41,10 @@ class MiddlewareQueue implements Countable, Iterator
     /**
      * Add Middleware.
      *
-     * @param Closure|Middleware|string $middleware The Middleware.
+     * @param Closure|MiddlewareInterface|string $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function add(Closure|Middleware|string $middleware): static
+    public function add(Closure|MiddlewareInterface|string $middleware): static
     {
         $this->queue[] = $middleware;
 
@@ -63,11 +64,11 @@ class MiddlewareQueue implements Countable, Iterator
     /**
      * Get the Middleware at the current index.
      *
-     * @return Closure|Middleware|string The Middleware at the current index.
+     * @return Closure|MiddlewareInterface|string The Middleware at the current index.
      *
      * @throws OutOfBoundsException if the index is out of bounds.
      */
-    public function current(): Closure|Middleware|string
+    public function current(): Closure|MiddlewareInterface|string
     {
         if (!$this->valid()) {
             throw new OutOfBoundsException('Invalid middleware at index: '.$this->index);
@@ -80,10 +81,10 @@ class MiddlewareQueue implements Countable, Iterator
      * Insert Middleware at a specified index.
      *
      * @param int $index The index.
-     * @param Closure|Middleware|string The Middleware.
+     * @param Closure|MiddlewareInterface|string The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function insertAt(int $index, Closure|Middleware|string $middleware): static
+    public function insertAt(int $index, Closure|MiddlewareInterface|string $middleware): static
     {
         array_splice($this->queue, $index, 0, [$middleware]);
 
@@ -111,10 +112,10 @@ class MiddlewareQueue implements Countable, Iterator
     /**
      * Prepend Middleware.
      *
-     * @param Closure|Middleware|string $middleware The Middleware.
+     * @param Closure|MiddlewareInterface|string $middleware The Middleware.
      * @return MiddlewareQueue The MiddlewareQueue.
      */
-    public function prepend(Closure|Middleware|string $middleware): static
+    public function prepend(Closure|MiddlewareInterface|string $middleware): static
     {
         array_unshift($this->queue, $middleware);
 
