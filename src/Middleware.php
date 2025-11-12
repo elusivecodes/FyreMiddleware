@@ -5,8 +5,8 @@ namespace Fyre\Middleware;
 
 use Fyre\Utility\Traits\MacroTrait;
 use Override;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -20,10 +20,10 @@ abstract class Middleware implements MiddlewareInterface
     /**
      * Process a ServerRequest.
      *
-     * @param RequestInterface $request The Request.
+     * @param ServerRequestInterface $request The Request.
      * @param RequestHandlerInterface $handler The RequestHandler.
      * @return ResponseInterface The Response.
      */
     #[Override]
-    abstract public function process(RequestInterface $request, RequestHandlerInterface $handler): ResponseInterface;
+    abstract public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface;
 }

@@ -5,7 +5,7 @@ namespace Tests\Mock;
 
 use Fyre\Middleware\Middleware;
 use Fyre\Server\ClientResponse;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 class MockMiddleware extends Middleware
@@ -17,7 +17,7 @@ class MockMiddleware extends Middleware
         return $this->loaded;
     }
 
-    public function process(RequestInterface $request, RequestHandlerInterface $handler): ClientResponse
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ClientResponse
     {
         $this->loaded = true;
 
